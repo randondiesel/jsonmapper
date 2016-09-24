@@ -17,7 +17,7 @@ from Java  object to JSON is implemented as
 
 Consider the following data object, which is a POJO :
 
-```
+```java
 public class UserProfile {
 
     @JSON("firstname")
@@ -40,7 +40,7 @@ public class UserProfile {
 Methods to set the values into these fields have not shown above for purpose of
 brevity. Now consider the following JSON string:
 
-```
+```json
 {
   "firstname": "Randon",
   "lastname": "Diesel",
@@ -51,7 +51,7 @@ brevity. Now consider the following JSON string:
 ```
 The code to load this JSON into `UserProfile` is as follows:
 
-```
+```java
 byte[] jsonStr = new byte[1024];
 
 // Write the logic to populate this array with the JSON data, e.g. by reading
@@ -64,7 +64,7 @@ UserProfile uprof = new Json2Object().convert(jsonStr, UserProfile.class);
 The reverse implementation, to write out the contents of an already populated
 UserProfile into a JSON string, is as follows:
 
-```
+```java
 UserProfile uprof = new UserProfile();
 
 // Write the logic to populate the fields of the instance, e.g. by calling
