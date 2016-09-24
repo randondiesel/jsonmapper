@@ -11,9 +11,9 @@ which is a reference implementation of a JSON package in Java.
 # Using JSON Mapper
 
 The JSON to Java object converter is implemented as
-```com.hashvoid.jsonmapper.decode.Json2Object```. The corresponding conversion
+`com.hashvoid.jsonmapper.decode.Json2Object`. The corresponding conversion
 from Java  object to JSON is implemented as
-```com.hashvoid.jsonmapper.encode.Object2Json```.
+`com.hashvoid.jsonmapper.encode.Object2Json`.
 
 Consider the following data object, which is a POJO :
 
@@ -49,7 +49,7 @@ brevity. Now consider the following JSON string:
   "dobyear": 2001
 }
 ```
-The code to load this JSON into ```UserProfile``` is as follows:
+The code to load this JSON into `UserProfile` is as follows:
 
 ```
 byte[] jsonStr = new byte[1024];
