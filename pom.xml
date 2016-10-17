@@ -103,23 +103,9 @@
 	</build>
 
 	<distributionManagement>
-		<!--
 		<repository>
-			<id>generic-ftp-server</id>
-			<name>generic ftp server for simple hosting</name>
-			<url>ftp://ftp.crossbinder.com/public_html/maven-repo</url>
-		</repository>
-		-->
-		<!--
-		<repository>
-			<id>ssh-repository</id>
-			<url>scpexe://maven.crossbinder.com/mnt/hdd/maven-repo</url>
-		</repository>
-		-->
-		<repository>
-			<id>bintray-crossbinder-maven</id>
-			<name>crossbinder-maven</name>
-			<url>https://api.bintray.com/maven/crossbinder/maven/crossbinder/;publish=1</url>
+			<id>hashvoid-archiva</id>
+			<url>http://hashvoid.com/archiva/repository/release</url>
 		</repository>
 	</distributionManagement>
 

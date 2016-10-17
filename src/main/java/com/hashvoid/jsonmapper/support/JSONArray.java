@@ -80,6 +80,7 @@ import java.util.Map;
  * @author JSON.org
  * @version 2016-08/15
  */
+
 public class JSONArray implements Iterable<Object> {
 
 	/**
@@ -165,6 +166,7 @@ public class JSONArray implements Iterable<Object> {
 	/**
 	 * Construct a JSONArray from an array
 	 *
+	 * @param array the array as an object.
 	 * @throws JSONException
 	 *             If not an array.
 	 */
@@ -255,6 +257,7 @@ public class JSONArray implements Iterable<Object> {
 	*            The type of enum to retrieve.
 	* @param index
 	*            The index must be between 0 and length() - 1.
+	* @param <E> the generic enumeration type.
 	* @return The enum value at the index location
 	* @throws JSONException
 	*            if the key is not found or if the value cannot be converted
@@ -564,6 +567,7 @@ public class JSONArray implements Iterable<Object> {
 	 *            The type of enum to retrieve.
 	 * @param index
 	 *            The index must be between 0 and length() - 1.
+	 * @param <E> the generic type of the enum.
 	 * @return The enum value at the index location or null if not found
 	 */
 	public <E extends Enum<E>> E optEnum(Class<E> clazz, int index) {
@@ -579,6 +583,7 @@ public class JSONArray implements Iterable<Object> {
 	 *            The index must be between 0 and length() - 1.
 	 * @param defaultValue
 	 *            The default in case the value is not found
+	 * @param <E> the generic type of the enum.
 	 * @return The enum value at the index location or defaultValue if
 	 *            the value is not found or cannot be assigned to clazz
 	 */
@@ -1103,7 +1108,7 @@ public class JSONArray implements Iterable<Object> {
 	 *         object, beginning with <code>[</code>&nbsp;<small>(left
 	 *         bracket)</small> and ending with <code>]</code>
 	 *         &nbsp;<small>(right bracket)</small>.
-	 * @throws JSONException
+	 * @throws JSONException indicates an error during conversion.
 	 */
 	public String toString(int indentFactor) throws JSONException {
 		StringWriter sw = new StringWriter();
@@ -1118,8 +1123,9 @@ public class JSONArray implements Iterable<Object> {
 	 * <p>
 	 * Warning: This method assumes that the data structure is acyclical.
 	 *
+	 * @param writer the writer to write to.
 	 * @return The writer.
-	 * @throws JSONException
+	 * @throws JSONException indicates an error during conversion.
 	 */
 	public Writer write(Writer writer) throws JSONException {
 		return this.write(writer, 0, 0);
@@ -1138,7 +1144,7 @@ public class JSONArray implements Iterable<Object> {
 	 * @param indent
 	 *            The indention of the top level.
 	 * @return The writer.
-	 * @throws JSONException
+	 * @throws JSONException indicates an error during this operation.
 	 */
 	public Writer write(Writer writer, int indentFactor, int indent)
 			throws JSONException {

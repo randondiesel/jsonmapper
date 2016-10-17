@@ -481,6 +481,7 @@ public class JSONObject {
 	*           The type of enum to retrieve.
 	* @param key
 	*           A key string.
+	* @param <E> the generic type of the enum.
 	* @return The enum value associated with the key
 	* @throws JSONException
 	*             if the key is not found or if the value cannot be converted
@@ -666,6 +667,7 @@ public class JSONObject {
 	/**
 	 * Get an array of field names from a JSONObject.
 	 *
+	 * @param jo the source json object.
 	 * @return An array of field names, or null if there are no names.
 	 */
 	public static String[] getNames(JSONObject jo) {
@@ -686,6 +688,7 @@ public class JSONObject {
 	/**
 	 * Get an array of field names from an Object.
 	 *
+	 * @param  object the array instance.
 	 * @return An array of field names, or null if there are no names.
 	 */
 	public static String[] getNames(Object object) {
@@ -871,6 +874,7 @@ public class JSONObject {
 	 *            The type of enum to retrieve.
 	 * @param key
 	 *            A key string.
+	 * @param <E> the generic type of the enum.
 	 * @return The enum value associated with the key or null if not found
 	 */
 	public <E extends Enum<E>> E optEnum(Class<E> clazz, String key) {
@@ -886,6 +890,7 @@ public class JSONObject {
 	 *            A key string.
 	 * @param defaultValue
 	 *            The default in case the value is not found
+	 * @param <E> the generic type of the enum.
 	 * @return The enum value associated with the key or defaultValue
 	 *            if the value is not found or cannot be assigned to clazz
 	 */
@@ -1199,7 +1204,7 @@ public class JSONObject {
 	 * @param value
 	 *            A Collection value.
 	 * @return this.
-	 * @throws JSONException
+	 * @throws JSONException indicates an error during this operation.
 	 */
 	public JSONObject put(String key, Collection<?> value) throws JSONException {
 		this.put(key, new JSONArray(value));
@@ -1263,7 +1268,7 @@ public class JSONObject {
 	 * @param value
 	 *            A Map value.
 	 * @return this.
-	 * @throws JSONException
+	 * @throws JSONException indicates an error during this operation.
 	 */
 	public JSONObject put(String key, Map<?, ?> value) throws JSONException {
 		this.put(key, new JSONObject(value));
@@ -1385,7 +1390,7 @@ public class JSONObject {
 
 	/**
 	 * Produce a string in double quotes with backslash sequences in all the
-	 * right places. A backslash will be inserted within </, producing <\/,
+	 * right places. A backslash will be inserted within &lt;/, producing &lt;\/,
 	 * allowing JSON text to be delivered in HTML. In JSON text, a string cannot
 	 * contain a control character or an unescaped quote or backslash.
 	 *
@@ -1790,8 +1795,9 @@ public class JSONObject {
 	 * <p>
 	 * Warning: This method assumes that the data structure is acyclical.
 	 *
+	 * @param writer the writer instance to write to.
 	 * @return The writer.
-	 * @throws JSONException
+	 * @throws JSONException indicates an error during this operation.
 	 */
 	public Writer write(Writer writer) throws JSONException {
 		return this.write(writer, 0, 0);
@@ -1864,7 +1870,7 @@ public class JSONObject {
 	 * @param indent
 	 *            The indention of the top level.
 	 * @return The writer.
-	 * @throws JSONException
+	 * @throws JSONException indicates an error during this operation.
 	 */
 	public Writer write(Writer writer, int indentFactor, int indent)
 			throws JSONException {
