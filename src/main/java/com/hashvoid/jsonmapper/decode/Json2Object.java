@@ -15,10 +15,14 @@
 package com.hashvoid.jsonmapper.decode;
 
 import java.io.ByteArrayInputStream;
-import java.util.ArrayList;
+import java.lang.reflect.Array;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import com.hashvoid.jsonmapper.support.JSONException;
+import com.hashvoid.jsonmapper.support.JSONArray;
 import com.hashvoid.jsonmapper.support.JSONObject;
 import com.hashvoid.jsonmapper.support.JSONTokener;
 
@@ -40,45 +44,51 @@ public class Json2Object {
 		reg.mapDecoder = new MapDecoder(reg);
 	}
 
-	public <T> T convert(byte[] data, Class<T> type) {
+	public Object convert(byte[] data, Type type) {
 		if(data == null) {
 			return null;
 		}
 		JSONTokener tokener = new JSONTokener(new ByteArrayInputStream(data));
 		Object nextVal = tokener.nextValue();
-		if(nextVal != null && nextVal instanceof JSONObject) {
-			JSONObject jsonObj = (JSONObject) nextVal;
-			try {
-				return reg.objectDecoder().convert(jsonObj, type);
+		if(nextVal == null) {
+			return null;
+		}
+
+		if(type instanceof Class) {
+			Class<?> ctype = (Class<?>) type;
+			if(ctype.isArray() && nextVal instanceof JSONArray) {
+				Object[] values = reg.arrayDecoder().convert((JSONArray) nextVal, ctype);
+				if(values != null) {
+					Object arrVal = Array.newInstance(ctype.getComponentType(), values.length);
+					for(int i=0; i < values.length; i++) {
+						Array.set(arrVal, i, values[i]);
+					}
+					return arrVal;
+				}
+				return null;
 			}
-			catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			else if(!ctype.isArray() && nextVal instanceof JSONObject) {
+				return reg.objectDecoder().convert((JSONObject) nextVal, ctype);
+			}
+		}
+		else if(type instanceof ParameterizedType) {
+			ParameterizedType ptype = (ParameterizedType) type;
+			Type rtype = ptype.getRawType();
+			if(nextVal instanceof JSONArray) {
+				if(rtype.equals(List.class)) {
+					return reg.listDecoder.convertList((JSONArray) nextVal, type);
+				}
+				if(rtype.equals(Set.class)) {
+					return reg.listDecoder.convertSet((JSONArray) nextVal, type);
+				}
+			}
+			else if(nextVal instanceof JSONObject) {
+				if(rtype.equals(Map.class)) {
+					return reg.mapDecoder.convert((JSONObject) nextVal, type);
+				}
 			}
 		}
 		return null;
-	}
-
-	public <T> List<T> convertAll(byte[] data, Class<T> type) {
-		JSONTokener tokener = new JSONTokener(new ByteArrayInputStream(data));
-		ArrayList<T> result = new ArrayList<>();
-		Object nextVal = null;
-		while((nextVal = tokener.nextValue()) != null) {
-			if(nextVal instanceof JSONObject) {
-				JSONObject jsonObj = (JSONObject) nextVal;
-				try {
-					T obj = reg.objectDecoder().convert(jsonObj, type);
-					if(obj != null) {
-						result.add(obj);
-					}
-				}
-				catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-		return result;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
