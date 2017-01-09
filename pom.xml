@@ -53,16 +53,6 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.18.1</version>
-				<configuration>
-					<includes>
-						<include>**/AllTests.java</include>
-					</includes>
-				</configuration>
-			</plugin>
-			<plugin>
 				<artifactId>maven-release-plugin</artifactId>
 				<version>2.4.1</version>
 				<configuration>
@@ -86,27 +76,17 @@
 				</executions>
 			</plugin>
 		</plugins>
-		<extensions>
-			<!-- Enabling the use of FTP -->
-			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-ftp</artifactId>
-				<version>1.0-beta-6</version>
-			</extension>
-			<!-- Enabling the use of SSH -->
-			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-ssh-external</artifactId>
-				<version>1.0-beta-6</version>
-			</extension>
-		</extensions>
 	</build>
 
 	<distributionManagement>
 		<repository>
-			<id>hashvoid-archiva</id>
-			<url>http://hashvoid.com/archiva/repository/release</url>
+			<id>hashvoid-release</id>
+			<url>http://hashvoid.com/artifactory/release</url>
 		</repository>
+		<snapshotRepository>
+			<id>hashvoid-snapshot</id>
+			<url>http://hashvoid.com/artifactory/snapshot</url>
+		</snapshotRepository>
 	</distributionManagement>
 
 </project>
