@@ -15,6 +15,8 @@
 package com.hashvoid.jsonmapper.decode;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -42,6 +44,23 @@ public class Json2Object {
 		reg.listDecoder = new ListDecoder(reg);
 		reg.arrDecoder = new ArrayDecoder(reg);
 		reg.mapDecoder = new MapDecoder(reg);
+	}
+
+	public Object convert(InputStream in, Type type) throws IOException {
+		byte[] buffer = new byte[0];
+		byte[] chunk = new byte[1024];
+		int amt = 0;
+		while((amt = in.read(chunk)) >= 0) {
+			if(amt == 0) {
+				continue;
+			}
+			byte[] tempbuf = new byte[buffer.length + amt];
+			System.arraycopy(buffer, 0, tempbuf, 0, buffer.length);
+			System.arraycopy(chunk, 0, tempbuf, buffer.length, amt);
+			buffer = tempbuf;
+		}
+		in.close();
+		return convert(buffer, type);
 	}
 
 	public Object convert(byte[] data, Type type) {

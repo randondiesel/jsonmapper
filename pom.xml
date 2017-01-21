@@ -80,13 +80,14 @@
 
 	<distributionManagement>
 		<repository>
-			<id>hashvoid-release</id>
-			<url>http://hashvoid.com/artifactory/release</url>
+			<id>randondiesel-release</id>
+			<url>http://randondiesel.com/artifactory/release</url>
 		</repository>
 		<snapshotRepository>
-			<id>hashvoid-snapshot</id>
-			<url>http://hashvoid.com/artifactory/snapshot</url>
+			<id>randondiesel-snapshot</id>
+			<url>http://randondiesel.com/artifactory/snapshot</url>
 		</snapshotRepository>
 	</distributionManagement>
+
 
 </project>
