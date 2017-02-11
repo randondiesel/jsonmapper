@@ -14,6 +14,11 @@
 
 package com.hashvoid.jsonmapper.encode;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
+import com.hashvoid.jsonmapper.support.JSONArray;
 import com.hashvoid.jsonmapper.support.JSONObject;
 
 /**
@@ -34,9 +39,26 @@ public class Object2Json {
 	}
 
 	public byte[] convert(Object obj) {
-		JSONObject jsonObj = reg.objectEncoder().convert(obj);
-		if(jsonObj != null) {
-			return jsonObj.toString(2).getBytes();
+		if(obj instanceof Collection) {
+			JSONArray jsonArr = null;
+			if(obj instanceof List) {
+				jsonArr = reg.arrayEncoder().convertList((List<?>) obj);
+			}
+			else if(obj instanceof Set) {
+				jsonArr = reg.arrayEncoder().convertSet((Set<?>) obj);
+			}
+			else if(obj.getClass().isArray()) {
+				jsonArr = reg.arrayEncoder().convertArray((Object[]) obj);
+			}
+			if(jsonArr != null) {
+				return jsonArr.toString(2).getBytes();
+			}
+		}
+		else {
+			JSONObject jsonObj = reg.objectEncoder().convert(obj);
+			if(jsonObj != null) {
+				return jsonObj.toString(2).getBytes();
+			}
 		}
 		return null;
 	}
