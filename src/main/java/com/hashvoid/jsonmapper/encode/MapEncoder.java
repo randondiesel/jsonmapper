@@ -14,8 +14,13 @@
 
 package com.hashvoid.jsonmapper.encode;
 
+import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import com.hashvoid.jsonmapper.JSON;
+import com.hashvoid.jsonmapper.support.JSONException;
 import com.hashvoid.jsonmapper.support.JSONObject;
 
 /**
@@ -34,16 +39,63 @@ class MapEncoder {
 	public JSONObject convert(Map<?, ?> map) {
 		JSONObject jsonObj = new JSONObject();
 		for(Object key : map.keySet()) {
-			if(key instanceof String) {
-				Object item = map.get(key);
-				if(item != null) {
-					Object jsonItem = encoderReg.objectEncoder().convert(item);
-					if(jsonItem != null) {
-						jsonObj.put((String) key, jsonItem);
-					}
-				}
+			if(!(key instanceof CharSequence)) {
+				continue;
+			}
+			Object jsonItem = convertOne(map.get(key));
+			if(jsonItem != null) {
+				jsonObj.put(((CharSequence) key).toString(), jsonItem);
 			}
 		}
 		return jsonObj;
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	// Helper methods
+
+	private Object convertOne(Object item) {
+		if(item == null) {
+			return null;
+		}
+		Class<?> itemCls = item.getClass();
+		if(itemCls.equals(Boolean.TYPE) || itemCls.equals(Boolean.class)) {
+			return (Boolean) item;
+		}
+		else if(itemCls.equals(Byte.TYPE) || itemCls.equals(Byte.class)) {
+			return new Integer((Byte) item);
+		}
+		else if(itemCls.equals(Character.TYPE) || itemCls.equals(Character.class)) {
+			return "" + item;
+		}
+		else if(itemCls.equals(Short.TYPE) || itemCls.equals(Short.class)) {
+			return new Integer((short) item);
+		}
+		else if(itemCls.equals(Integer.TYPE) || itemCls.equals(Integer.class)) {
+			return (Integer) item;
+		}
+		else if(itemCls.equals(Long.TYPE) || itemCls.equals(Long.class)) {
+			return (Long) item;
+		}
+		else if(itemCls.equals(Float.TYPE) || itemCls.equals(Float.class)) {
+			return new Double( (float) item);
+		}
+		else if(itemCls.equals(Double.TYPE) || itemCls.equals(Double.class)) {
+			return (Double) item;
+		}
+		else if(item instanceof List) {
+			return encoderReg.arrayEncoder().convertList((List<?>) item);
+		}
+		else if(item instanceof Set) {
+			return encoderReg.arrayEncoder().convertSet((Set<?>) item);
+		}
+		else if(item.getClass().isArray()) {
+			return encoderReg.arrayEncoder().convertArray((Object[]) item);
+		}
+		else if(item instanceof Map) {
+			return encoderReg.mapEncoder().convert((Map<?, ?>) item);
+		}
+		else {
+			return encoderReg.objectEncoder().convert(item);
+		}
 	}
 }

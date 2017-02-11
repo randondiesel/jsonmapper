@@ -138,6 +138,10 @@ class MapDecoder {
 			return json.getDouble(key);
 		}
 
+		if(compType.equals(Number.class)) {
+			return json.getDouble(key);
+		}
+
 		if(compType.equals(String.class)) {
 			return json.getString(key);
 		}
