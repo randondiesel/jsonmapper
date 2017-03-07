@@ -9,6 +9,6 @@ cd ..
 
 $MAVEN_BIN versions:set
 $MAVEN_BIN -N versions:update-child-modules
-$MAVEN_BIN versions:commit
+$MAVEN_BIN -N versions:commit
 
 cd $BASE_DIR
