@@ -95,6 +95,9 @@ class ArrayEncoder {
 		else if(itemCls.equals(Double.TYPE) || itemCls.equals(Double.class)) {
 			return (Double) item;
 		}
+		else if(item instanceof CharSequence) {
+			return item.toString();
+		}
 		else if(item instanceof List) {
 			return convertList((List<?>) item);
 		}

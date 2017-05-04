@@ -14,13 +14,10 @@
 
 package com.hashvoid.jsonmapper.encode;
 
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.hashvoid.jsonmapper.JSON;
-import com.hashvoid.jsonmapper.support.JSONException;
 import com.hashvoid.jsonmapper.support.JSONObject;
 
 /**
@@ -81,6 +78,9 @@ class MapEncoder {
 		}
 		else if(itemCls.equals(Double.TYPE) || itemCls.equals(Double.class)) {
 			return (Double) item;
+		}
+		else if(item instanceof CharSequence) {
+			return item.toString();
 		}
 		else if(item instanceof List) {
 			return encoderReg.arrayEncoder().convertList((List<?>) item);
