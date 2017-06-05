@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.hashvoid.jsonmapper.decode;
+package rd.jsonmapper.decode;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -24,9 +24,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.hashvoid.jsonmapper.support.JSONArray;
-import com.hashvoid.jsonmapper.support.JSONObject;
-import com.hashvoid.jsonmapper.support.JSONTokener;
+import rd.jsonmapper.support.JSONArray;
+import rd.jsonmapper.support.JSONObject;
+import rd.jsonmapper.support.JSONTokener;
 
 /**
  * @author randondiesel

@@ -1,4 +1,4 @@
-package com.hashvoid.jsonmapper.support;
+package rd.jsonmapper.support;
 
 /**
  * The JSONException is thrown by the JSON.org classes when things are amiss.

@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package com.hashvoid.jsonmapper.support;
+package rd.jsonmapper.support;
 
 import java.io.IOException;
 import java.io.StringWriter;

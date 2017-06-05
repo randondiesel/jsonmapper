@@ -12,21 +12,25 @@
  * the License.
  */
 
-package com.hashvoid.jsonmapper;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package rd.jsonmapper.decode;
 
 /**
- * @author randondiesel
+ * Provides a common context for decoders to refer to each other during JSON processing. Allows for
+ * decoders to be maintained as singleton entities for better optimizations.
+ * <p>
  *
+ * @author randondiesel
  */
 
-@Target({ElementType.FIELD})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface JSON {
+interface DecoderRegistry {
 
-	String value();
+	ObjectDecoder objectDecoder();
+
+	FieldDecoder fieldDecoder();
+
+	ListDecoder listDecoder();
+
+	ArrayDecoder arrayDecoder();
+
+	MapDecoder mapDecoder();
 }

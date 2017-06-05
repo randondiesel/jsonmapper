@@ -12,11 +12,11 @@
  * the License.
  */
 
-package com.hashvoid.jsonmapper.decode;
+package rd.jsonmapper.decode;
 
 import java.lang.reflect.Modifier;
 
-import com.hashvoid.jsonmapper.support.JSONArray;
+import rd.jsonmapper.support.JSONArray;
 
 /**
  * @author randondiesel

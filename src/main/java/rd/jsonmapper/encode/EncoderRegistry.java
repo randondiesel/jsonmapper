@@ -12,25 +12,20 @@
  * the License.
  */
 
-package com.hashvoid.jsonmapper.decode;
+package rd.jsonmapper.encode;
 
 /**
- * Provides a common context for decoders to refer to each other during JSON processing. Allows for
- * decoders to be maintained as singleton entities for better optimizations.
- * <p>
- *
  * @author randondiesel
+ *
  */
 
-interface DecoderRegistry {
+interface EncoderRegistry {
 
-	ObjectDecoder objectDecoder();
+	ObjectEncoder objectEncoder();
 
-	FieldDecoder fieldDecoder();
+	FieldEncoder fieldEncoder();
 
-	ListDecoder listDecoder();
+	ArrayEncoder arrayEncoder();
 
-	ArrayDecoder arrayDecoder();
-
-	MapDecoder mapDecoder();
+	MapEncoder mapEncoder();
 }

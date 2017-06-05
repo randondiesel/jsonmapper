@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.hashvoid.jsonmapper.decode;
+package rd.jsonmapper.decode;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -21,10 +21,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.hashvoid.jsonmapper.JSON;
-import com.hashvoid.jsonmapper.support.JSONArray;
-import com.hashvoid.jsonmapper.support.JSONException;
-import com.hashvoid.jsonmapper.support.JSONObject;
+import rd.jsonmapper.JSON;
+import rd.jsonmapper.support.JSONArray;
+import rd.jsonmapper.support.JSONException;
+import rd.jsonmapper.support.JSONObject;
 
 /**
  * @author randondiesel

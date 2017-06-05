@@ -12,44 +12,57 @@
  * the License.
  */
 
-package com.hashvoid.jsonmapper.encode;
+package rd.jsonmapper.decode;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.hashvoid.jsonmapper.JSON;
-import com.hashvoid.jsonmapper.support.JSONException;
-import com.hashvoid.jsonmapper.support.JSONObject;
+import rd.jsonmapper.JSON;
+import rd.jsonmapper.support.JSONException;
+import rd.jsonmapper.support.JSONObject;
 
 /**
  * @author randondiesel
  *
  */
 
-class ObjectEncoder {
+class ObjectDecoder {
 
-	private EncoderRegistry encoderReg;
+	private DecoderRegistry decoderReg;
 
-	public ObjectEncoder(EncoderRegistry reg) {
-		encoderReg = reg;
+	public ObjectDecoder(DecoderRegistry reg) {
+		decoderReg = reg;
 	}
 
-	public JSONObject convert(Object obj) {
+	public <T> T convert(JSONObject jsonObj, Class<T> type) {
+		T target;
 
-		JSONObject jsonObj = new JSONObject();
+		try {
+			target = type.newInstance();
+		}
+		catch (InstantiationException | IllegalAccessException exep) {
+			exep.printStackTrace();
+			return null;
+		}
+
 		List<Field> allFields = new LinkedList<>();
-		collateAllFields(obj.getClass(), allFields);
+		collateAllFields(type, allFields);
 		for(Field field : allFields) {
 			try {
-				encoderReg.fieldEncoder().convert(obj, field, jsonObj);
+				decoderReg.fieldDecoder().convert(jsonObj, target, field);
 			}
 			catch(ReflectiveOperationException | JSONException exep) {
-				exep.printStackTrace();
+				//exep.printStackTrace();
 			}
 		}
-		return jsonObj;
+		return target;
+	}
+
+	public <T> T toObject(Class<T> type, Type genericType) {
+		return null;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////

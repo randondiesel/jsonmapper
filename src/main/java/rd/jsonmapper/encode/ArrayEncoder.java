@@ -12,13 +12,13 @@
  * the License.
  */
 
-package com.hashvoid.jsonmapper.encode;
+package rd.jsonmapper.encode;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.hashvoid.jsonmapper.support.JSONArray;
+import rd.jsonmapper.support.JSONArray;
 
 /**
  * @author randondiesel
