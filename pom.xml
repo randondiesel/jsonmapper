@@ -73,11 +73,11 @@
 	<distributionManagement>
 		<repository>
 			<id>randondiesel-release</id>
-			<url>http://randondiesel.com/artifactory/release</url>
+			<url>http://randondiesel.com/repository/releases</url>
 		</repository>
 		<snapshotRepository>
 			<id>randondiesel-snapshot</id>
-			<url>http://randondiesel.com/artifactory/snapshot</url>
+			<url>http://randondiesel.com/repository/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
 
