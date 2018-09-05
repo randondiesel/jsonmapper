@@ -26,7 +26,7 @@ import rd.jsonmapper.support.JSONException;
 import rd.jsonmapper.support.JSONObject;
 
 /**
- * @author randondiesel
+ * @author indroneel
  *
  */
 

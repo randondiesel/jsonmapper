@@ -19,7 +19,7 @@ package rd.jsonmapper.decode;
  * decoders to be maintained as singleton entities for better optimizations.
  * <p>
  *
- * @author randondiesel
+ * @author indroneel
  */
 
 interface DecoderRegistry {

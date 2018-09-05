@@ -15,7 +15,7 @@
 package rd.jsonmapper.encode;
 
 /**
- * @author randondiesel
+ * @author indroneel
  *
  */
 

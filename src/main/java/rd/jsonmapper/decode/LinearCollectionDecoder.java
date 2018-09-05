@@ -19,7 +19,7 @@ import java.lang.reflect.Modifier;
 import rd.jsonmapper.support.JSONArray;
 
 /**
- * @author randondiesel
+ * @author indroneel
  *
  */
 
