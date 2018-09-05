@@ -29,7 +29,7 @@ import rd.jsonmapper.support.JSONObject;
 import rd.jsonmapper.support.JSONTokener;
 
 /**
- * @author randondiesel
+ * @author indroneel
  *
  */
 

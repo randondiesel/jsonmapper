@@ -27,7 +27,7 @@ import rd.jsonmapper.support.JSONArray;
 import rd.jsonmapper.support.JSONObject;
 
 /**
- * @author randondiesel
+ * @author indroneel
  *
  */
 

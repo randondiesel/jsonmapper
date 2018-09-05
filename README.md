@@ -1,19 +1,13 @@
 # About JSON Mapper
 
-JSON is a lightweight library to convert between JSON encoded data and Java
-objects. It relies only on reflection, generics and runtime annotations to
-perform the conversions.
+JSON is a lightweight library to convert between JSON encoded data and Java objects. It relies only on reflection, generics and runtime annotations to perform the conversions.
 
-JSON Mapper builds on top of [JSON-java](https://github.com/stleary/JSON-java),
-which is a reference implementation of a JSON package in Java.
+JSON Mapper builds on top of [JSON-java](https://github.com/stleary/JSON-java), which is a reference implementation of a JSON package in Java.
 
 
 # Using JSON Mapper
 
-The JSON to Java object converter is implemented as
-`com.hashvoid.jsonmapper.decode.Json2Object`. The corresponding conversion
-from Java  object to JSON is implemented as
-`com.hashvoid.jsonmapper.encode.Object2Json`.
+The JSON to Java object converter is implemented as `rd.jsonmapper.decode.Json2Object`. The corresponding conversion from Java  object to JSON is implemented as `rd.jsonmapper.encode.Object2Json`.
 
 Consider the following data object, which is a POJO :
 
@@ -37,8 +31,7 @@ public class UserProfile {
 }
 ```
 
-Methods to set the values into these fields have not shown above for purpose of
-brevity. Now consider the following JSON string:
+Methods to set the values into these fields have not shown above for purpose of brevity. Now consider the following JSON string:
 
 ```json
 {
@@ -61,8 +54,7 @@ UserProfile uprof = new Json2Object().convert(jsonStr, UserProfile.class);
 
 ```
 
-The reverse implementation, to write out the contents of an already populated
-UserProfile into a JSON string, is as follows:
+The reverse implementation, to write out the contents of an already populated `UserProfile` into a JSON string, is as follows:
 
 ```java
 UserProfile uprof = new UserProfile();
