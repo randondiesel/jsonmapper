@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Set;
 
 import rd.jsonmapper.JSON;
+import rd.jsonmapper.Raw;
 import rd.jsonmapper.support.JSONArray;
 import rd.jsonmapper.support.JSONException;
 import rd.jsonmapper.support.JSONObject;
@@ -42,11 +43,15 @@ class FieldDecoder {
 	public void convert(JSONObject parentJson, Object parentObj, Field field)
 			throws ReflectiveOperationException, JSONException {
 
-		JSON ann = field.getAnnotation(JSON.class);
+		if(convertRaw(parentJson, parentObj, field)) {
+			return;
+		}
 
 		if(convertPrimitive(parentJson, parentObj, field)) {
 			return;
 		}
+
+		JSON ann = field.getAnnotation(JSON.class);
 
 		if(field.getType().equals(String.class)) {
 			String fieldVal = parentJson.getString(ann.value());
@@ -91,6 +96,29 @@ class FieldDecoder {
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	// Helper methods
+
+	private boolean convertRaw(JSONObject parentJson, Object parentObj, Field field)
+			throws ReflectiveOperationException, JSONException {
+
+		Raw rann = field.getAnnotation(Raw.class);
+		if(rann == null) {
+			return false;
+		}
+
+		JSON ann = field.getAnnotation(JSON.class);
+		Class<?> fldType = field.getType();
+		if(fldType.equals(String.class)) {
+			String fieldVal = parentJson.getJSONObject(ann.value()).toString();
+			populate(parentObj, field, fieldVal);
+			return true;
+		}
+		else if(fldType.equals(byte[].class)) {
+			String fieldVal = parentJson.getJSONObject(ann.value()).toString();
+			populate(parentObj, field, fieldVal.getBytes());
+			return true;
+		}
+		return false;
+	}
 
 	private boolean convertPrimitive(JSONObject parentJson, Object parentObj, Field field)
 			throws ReflectiveOperationException, JSONException {
