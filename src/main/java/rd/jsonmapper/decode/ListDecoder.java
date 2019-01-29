@@ -41,7 +41,7 @@ class ListDecoder extends LinearCollectionDecoder {
 
 	public List<?> convertList(JSONArray jsonArr, Type genType) {
 		if(!(genType instanceof ParameterizedType)) {
-			System.out.println("not parameterized");
+			//System.out.println("not parameterized");
 			return null;
 		}
 		ParameterizedType pmzType = (ParameterizedType) genType;

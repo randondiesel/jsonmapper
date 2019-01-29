@@ -41,7 +41,7 @@ class MapDecoder {
 
 	public Map<?, ?> convert(JSONObject jsonObj, Type genType) {
 		if(!(genType instanceof ParameterizedType)) {
-			System.out.println("not parameterized");
+			//System.out.println("not parameterized");
 			return null;
 		}
 		ParameterizedType pmzType = (ParameterizedType) genType;
@@ -51,12 +51,12 @@ class MapDecoder {
 		}
 
 		if(!typeArgs[0].equals(String.class)) {
-			System.out.println("first parameter must be string");
+			//System.out.println("first parameter must be string");
 			return null;
 		}
 
 		if(typeArgs[1] instanceof WildcardType) {
-			System.out.println("second parameter must not be wildcard");
+			//System.out.println("second parameter must not be wildcard");
 			return null;
 		}
 

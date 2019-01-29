@@ -39,6 +39,7 @@ public class Json2Object {
 
 	private DecoderRegistryImpl reg;
 	private JSONTokener         tokener;
+	private Object              jsonRoot;
 
 	public Json2Object(InputStream in) throws IOException {
 		byte[] buffer = new byte[0];
@@ -62,18 +63,14 @@ public class Json2Object {
 	}
 
 	public Object convert(Type type) {
-		if(tokener == null) {
-			return null;
-		}
-		Object nextVal = tokener.nextValue();
-		if(nextVal == null) {
+		if(jsonRoot == null) {
 			return null;
 		}
 
 		if(type instanceof Class) {
 			Class<?> ctype = (Class<?>) type;
-			if(ctype.isArray() && nextVal instanceof JSONArray) {
-				Object[] values = reg.arrayDecoder().convert((JSONArray) nextVal, ctype);
+			if(ctype.isArray() && jsonRoot instanceof JSONArray) {
+				Object[] values = reg.arrayDecoder().convert((JSONArray) jsonRoot, ctype);
 				if(values != null) {
 					Object arrVal = Array.newInstance(ctype.getComponentType(), values.length);
 					for(int i=0; i < values.length; i++) {
@@ -83,24 +80,24 @@ public class Json2Object {
 				}
 				return null;
 			}
-			else if(!ctype.isArray() && nextVal instanceof JSONObject) {
-				return reg.objectDecoder().convert((JSONObject) nextVal, ctype);
+			else if(!ctype.isArray() && jsonRoot instanceof JSONObject) {
+				return reg.objectDecoder().convert((JSONObject) jsonRoot, ctype);
 			}
 		}
 		else if(type instanceof ParameterizedType) {
 			ParameterizedType ptype = (ParameterizedType) type;
 			Type rtype = ptype.getRawType();
-			if(nextVal instanceof JSONArray) {
+			if(jsonRoot instanceof JSONArray) {
 				if(rtype.equals(List.class)) {
-					return reg.listDecoder.convertList((JSONArray) nextVal, type);
+					return reg.listDecoder.convertList((JSONArray) jsonRoot, type);
 				}
 				if(rtype.equals(Set.class)) {
-					return reg.listDecoder.convertSet((JSONArray) nextVal, type);
+					return reg.listDecoder.convertSet((JSONArray) jsonRoot, type);
 				}
 			}
-			else if(nextVal instanceof JSONObject) {
+			else if(jsonRoot instanceof JSONObject) {
 				if(rtype.equals(Map.class)) {
-					return reg.mapDecoder.convert((JSONObject) nextVal, type);
+					return reg.mapDecoder.convert((JSONObject) jsonRoot, type);
 				}
 			}
 		}
@@ -108,15 +105,10 @@ public class Json2Object {
 	}
 
 	public Object convert(String path, Type type) {
-		if(tokener == null) {
+		if(jsonRoot == null || !(jsonRoot instanceof JSONObject)) {
 			return null;
 		}
-
-		Object rootVal = tokener.nextValue();
-		if(rootVal == null || !(rootVal instanceof JSONObject)) {
-			return null;
-		}
-		JSONObject nowVal = (JSONObject) rootVal;
+		JSONObject nowVal = (JSONObject) jsonRoot;
 
 		String[] pathElements = path.split("\\.");
 		for(int i = 0; i < (pathElements.length - 1); i++) {
@@ -278,6 +270,7 @@ public class Json2Object {
 			return;
 		}
 		tokener = new JSONTokener(new ByteArrayInputStream(data));
+		jsonRoot = tokener.nextValue();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
