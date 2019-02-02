@@ -15,6 +15,8 @@
 package rd.jsonmapper.decode;
 
 import java.lang.reflect.Modifier;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import rd.jsonmapper.support.JSONArray;
 
@@ -50,12 +52,13 @@ abstract class LinearCollectionDecoder {
 		}
 
 		if(compType.equals(Short.TYPE) || compType.equals(Short.class)) {
-			Integer value = jsonArr.getInt(position);
+			Double value = jsonArr.getDouble(position);
 			return value.shortValue();
 		}
 
 		if(compType.equals(Integer.TYPE) || compType.equals(Integer.class)) {
-			return jsonArr.getInt(position);
+			Double value = jsonArr.getDouble(position);
+			return value.intValue();
 		}
 
 		if(compType.equals(Long.TYPE) || compType.equals(Long.class)) {
@@ -73,6 +76,14 @@ abstract class LinearCollectionDecoder {
 
 		if(compType.equals(String.class)) {
 			return jsonArr.getString(position);
+		}
+
+		if(compType.equals(BigDecimal.class)) {
+			return jsonArr.getBigDecimal(position);
+		}
+
+		if(compType.equals(BigInteger.class)) {
+			return jsonArr.getBigInteger(position);
 		}
 
 		if(compType.isArray()) {

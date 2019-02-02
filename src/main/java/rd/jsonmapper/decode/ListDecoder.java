@@ -16,6 +16,7 @@ package rd.jsonmapper.decode;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -47,6 +48,11 @@ class ListDecoder extends LinearCollectionDecoder {
 		ParameterizedType pmzType = (ParameterizedType) genType;
 		Type[] typeArgs = pmzType.getActualTypeArguments();
 		if(typeArgs.length != 1) {
+			return null;
+		}
+
+		if(typeArgs[0] instanceof WildcardType) {
+			//System.out.println("parameter must not be wildcard");
 			return null;
 		}
 

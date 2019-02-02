@@ -149,7 +149,7 @@ public class Json2Object {
 			}
 			if(ctype.equals(Short.TYPE) || ctype.equals(Short.class)) {
 				try {
-					Integer value = nowVal.getInt(name);
+					Double value = nowVal.getDouble(name);
 					return value.shortValue();
 				}
 				catch(Exception exep) {
@@ -158,7 +158,8 @@ public class Json2Object {
 			}
 			if(ctype.equals(Integer.TYPE) || ctype.equals(Integer.class)) {
 				try {
-					return nowVal.getInt(name);
+					Double value = nowVal.getDouble(name);
+					return value.intValue();
 				}
 				catch(Exception exep) {
 					return ctype.equals(Integer.TYPE) ? 0 : null;
@@ -187,6 +188,15 @@ public class Json2Object {
 				}
 				catch(Exception exep) {
 					return ctype.equals(Double.TYPE) ? (double) 0 : null;
+				}
+			}
+			//end primitives
+			if(ctype.equals(String.class)) {
+				try {
+					return nowVal.getString(name);
+				}
+				catch(Exception exep) {
+					return null;
 				}
 			}
 			if(ctype.equals(BigInteger.class)) {

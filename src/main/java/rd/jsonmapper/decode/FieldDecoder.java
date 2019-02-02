@@ -17,6 +17,8 @@ package rd.jsonmapper.decode;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -55,6 +57,18 @@ class FieldDecoder {
 
 		if(field.getType().equals(String.class)) {
 			String fieldVal = parentJson.getString(ann.value());
+			populate(parentObj, field, fieldVal);
+			return;
+		}
+
+		if(field.getType().equals(BigDecimal.class)) {
+			BigDecimal fieldVal = parentJson.getBigDecimal(ann.value());
+			populate(parentObj, field, fieldVal);
+			return;
+		}
+
+		if(field.getType().equals(BigInteger.class)) {
+			BigInteger fieldVal = parentJson.getBigInteger(ann.value());
 			populate(parentObj, field, fieldVal);
 			return;
 		}
@@ -126,6 +140,7 @@ class FieldDecoder {
 		JSON ann = field.getAnnotation(JSON.class);
 		Object fieldVal = null;
 		Class<?> fldType = field.getType();
+
 		if(fldType.equals(Boolean.TYPE) || fldType.equals(Boolean.class)) {
 			fieldVal = parentJson.getBoolean(ann.value());
 			flag = true;
@@ -142,12 +157,13 @@ class FieldDecoder {
 			flag = true;
 		}
 		else if(fldType.equals(Short.TYPE) || fldType.equals(Short.class)) {
-			Integer value = parentJson.getInt(ann.value());
+			Double value = parentJson.getDouble(ann.value());
 			fieldVal = value.shortValue();
 			flag = true;
 		}
 		else if(fldType.equals(Integer.TYPE) || fldType.equals(Integer.class)) {
-			fieldVal = parentJson.getInt(ann.value());
+			Double value = parentJson.getDouble(ann.value());
+			fieldVal = value.intValue();
 			flag = true;
 		}
 		else if(fldType.equals(Long.TYPE) || fldType.equals(Long.class)) {

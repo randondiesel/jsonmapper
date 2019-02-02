@@ -18,6 +18,8 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.WildcardType;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -117,12 +119,13 @@ class MapDecoder {
 		}
 
 		if(compType.equals(Short.TYPE) || compType.equals(Short.class)) {
-			Integer value = json.getInt(key);
+			Double value = json.getDouble(key);
 			return value.shortValue();
 		}
 
 		if(compType.equals(Integer.TYPE) || compType.equals(Integer.class)) {
-			return json.getInt(key);
+			Double value = json.getDouble(key);
+			return value.intValue();
 		}
 
 		if(compType.equals(Long.TYPE) || compType.equals(Long.class)) {
@@ -144,6 +147,14 @@ class MapDecoder {
 
 		if(compType.equals(String.class)) {
 			return json.getString(key);
+		}
+
+		if(compType.equals(BigDecimal.class)) {
+			return json.getBigDecimal(key);
+		}
+
+		if(compType.equals(BigInteger.class)) {
+			return json.getBigInteger(key);
 		}
 
 		if(compType.isArray()) {
