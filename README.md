@@ -50,7 +50,7 @@ byte[] jsonStr = new byte[1024];
 // Write the logic to populate this array with the JSON data, e.g. by reading
 // from a file.
 
-UserProfile uprof = new Json2Object().convert(jsonStr, UserProfile.class);
+UserProfile uprof = new Json2Object(jsonStr).convert(UserProfile.class);
 
 ```
 
