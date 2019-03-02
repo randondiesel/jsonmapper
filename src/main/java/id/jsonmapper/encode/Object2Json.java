@@ -12,14 +12,14 @@
  * the License.
  */
 
-package rd.jsonmapper.encode;
+package id.jsonmapper.encode;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import rd.jsonmapper.support.JSONArray;
-import rd.jsonmapper.support.JSONObject;
+import id.jsonmapper.support.JSONArray;
+import id.jsonmapper.support.JSONObject;
 
 /**
  * @author indroneel

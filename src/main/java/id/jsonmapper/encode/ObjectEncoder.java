@@ -12,16 +12,16 @@
  * the License.
  */
 
-package rd.jsonmapper.encode;
+package id.jsonmapper.encode;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.LinkedList;
 import java.util.List;
 
-import rd.jsonmapper.JSON;
-import rd.jsonmapper.support.JSONException;
-import rd.jsonmapper.support.JSONObject;
+import id.jsonmapper.JSON;
+import id.jsonmapper.support.JSONException;
+import id.jsonmapper.support.JSONObject;
 
 /**
  * @author indroneel

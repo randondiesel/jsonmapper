@@ -12,21 +12,20 @@
  * the License.
  */
 
-package rd.jsonmapper;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package id.jsonmapper.encode;
 
 /**
- *
  * @author indroneel
  *
  */
 
-@Target({ElementType.FIELD})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Raw {
+interface EncoderRegistry {
 
+	ObjectEncoder objectEncoder();
+
+	FieldEncoder fieldEncoder();
+
+	ArrayEncoder arrayEncoder();
+
+	MapEncoder mapEncoder();
 }

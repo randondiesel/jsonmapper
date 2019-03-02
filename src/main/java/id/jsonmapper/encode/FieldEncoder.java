@@ -12,7 +12,7 @@
  * the License.
  */
 
-package rd.jsonmapper.encode;
+package id.jsonmapper.encode;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -20,10 +20,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import rd.jsonmapper.JSON;
-import rd.jsonmapper.support.JSONArray;
-import rd.jsonmapper.support.JSONException;
-import rd.jsonmapper.support.JSONObject;
+import id.jsonmapper.JSON;
+import id.jsonmapper.support.JSONArray;
+import id.jsonmapper.support.JSONException;
+import id.jsonmapper.support.JSONObject;
 
 /**
  * @author indroneel

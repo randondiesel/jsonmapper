@@ -4,16 +4,16 @@
 		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>rd.jsonmapper</groupId>
-	<artifactId>rd.jsonmapper</artifactId>
+	<groupId>id.jsonmapper</groupId>
+	<artifactId>id.jsonmapper</artifactId>
 	<version>0.2-SNAPSHOT</version>
 	<name>JSON Mapper</name>
 	<description>Library to convert between JSON data and Java objects</description>
 	<packaging>jar</packaging>
 
 	<scm>
-		<url>https://github.com/randondiesel/jsonmapper.git</url>
-		<connection>scm:git:https://github.com/randondiesel/jsonmapper.git</connection>
+		<url>https://github.com/indroneel/jsonmapper.git</url>
+		<connection>scm:git:https://github.com/indroneel/jsonmapper.git</connection>
 	</scm>
 
 	<build>
@@ -72,11 +72,11 @@
 
 	<distributionManagement>
 		<repository>
-			<id>randondiesel-release</id>
+			<id>indr-release</id>
 			<url>${deploy.release.url}</url>
 		</repository>
 		<snapshotRepository>
-			<id>randondiesel-snapshot</id>
+			<id>indr-snapshot</id>
 			<url>${deploy.snapshot.url}</url>
 		</snapshotRepository>
 	</distributionManagement>

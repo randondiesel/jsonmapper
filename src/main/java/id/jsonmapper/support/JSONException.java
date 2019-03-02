@@ -1,4 +1,4 @@
-package rd.jsonmapper.support;
+package id.jsonmapper.support;
 
 /**
  * The JSONException is thrown by the JSON.org classes when things are amiss.

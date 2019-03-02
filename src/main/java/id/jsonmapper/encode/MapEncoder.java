@@ -12,13 +12,13 @@
  * the License.
  */
 
-package rd.jsonmapper.encode;
+package id.jsonmapper.encode;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import rd.jsonmapper.support.JSONObject;
+import id.jsonmapper.support.JSONObject;
 
 /**
  * @author indroneel

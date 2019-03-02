@@ -12,13 +12,13 @@
  * the License.
  */
 
-package rd.jsonmapper.decode;
+package id.jsonmapper.decode;
 
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import rd.jsonmapper.support.JSONArray;
+import id.jsonmapper.support.JSONArray;
 
 /**
  * @author indroneel

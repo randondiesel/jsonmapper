@@ -12,7 +12,7 @@
  * the License.
  */
 
-package rd.jsonmapper.decode;
+package id.jsonmapper.decode;
 
 /**
  * Provides a common context for decoders to refer to each other during JSON processing. Allows for

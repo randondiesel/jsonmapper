@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package rd.jsonmapper.support;
+package id.jsonmapper.support;
 
 import java.io.BufferedReader;
 import java.io.IOException;

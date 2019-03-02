@@ -12,7 +12,7 @@
  * the License.
  */
 
-package rd.jsonmapper.decode;
+package id.jsonmapper.decode;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

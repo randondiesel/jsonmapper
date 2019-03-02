@@ -12,7 +12,7 @@
  * the License.
  */
 
-package rd.jsonmapper.decode;
+package id.jsonmapper.decode;
 
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import rd.jsonmapper.support.JSONArray;
-import rd.jsonmapper.support.JSONObject;
+import id.jsonmapper.support.JSONArray;
+import id.jsonmapper.support.JSONObject;
 
 /**
  * @author indroneel
