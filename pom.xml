@@ -72,11 +72,11 @@
 
 	<distributionManagement>
 		<repository>
-			<id>indr-release</id>
+			<id>selfhosted-release</id>
 			<url>${deploy.release.url}</url>
 		</repository>
 		<snapshotRepository>
-			<id>indr-snapshot</id>
+			<id>selfhosted-snapshot</id>
 			<url>${deploy.snapshot.url}</url>
 		</snapshotRepository>
 	</distributionManagement>
