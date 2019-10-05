@@ -39,6 +39,10 @@ public class Object2Json {
 	}
 
 	public byte[] convert(Object obj) {
+		return convert(obj, false);
+	}
+
+	public byte[] convert(Object obj, boolean pretty) {
 		if(obj instanceof Collection) {
 			JSONArray jsonArr = null;
 			if(obj instanceof List) {
@@ -57,7 +61,12 @@ public class Object2Json {
 		else {
 			JSONObject jsonObj = reg.objectEncoder().convert(obj);
 			if(jsonObj != null) {
-				return jsonObj.toString(2).getBytes();
+				if(pretty) {
+					return jsonObj.toString(2).getBytes();
+				}
+				else {
+					return jsonObj.toString().getBytes();
+				}
 			}
 		}
 		return null;
