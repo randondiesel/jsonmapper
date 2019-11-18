@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import id.jsonmapper.Converter;
 import id.jsonmapper.support.JSONArray;
 import id.jsonmapper.support.JSONObject;
 
@@ -39,14 +40,14 @@ class ArrayDecoder extends LinearCollectionDecoder {
 		decoderReg = reg;
 	}
 
-	public Object[] convert(JSONArray jsonArr, Type genType) {
+	public Object[] convert(JSONArray jsonArr, Type genType, Converter conv) {
 		if (genType instanceof GenericArrayType) {
 			GenericArrayType genArrType = (GenericArrayType) genType;
 			ArrayList<?> valueList = convertGenericArrayType(jsonArr, genArrType);
 			return valueList.toArray();
 		}
 		else if (genType instanceof Class) {
-			ArrayList<?> valueList = convertClassType(jsonArr, (Class<?>) genType);
+			ArrayList<?> valueList = convertClassType(jsonArr, (Class<?>) genType, conv);
 			return valueList.toArray();
 		}
 		return null;
@@ -55,7 +56,8 @@ class ArrayDecoder extends LinearCollectionDecoder {
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	// Helper methods
 
-	private ArrayList<?> convertGenericArrayType(JSONArray jsonArr, GenericArrayType genArrType) {
+	private ArrayList<?> convertGenericArrayType(JSONArray jsonArr,
+			GenericArrayType genArrType) {
 		Type compGenType = genArrType.getGenericComponentType();
 		if(!(compGenType instanceof ParameterizedType)) {
 			return null;
@@ -67,32 +69,32 @@ class ArrayDecoder extends LinearCollectionDecoder {
 		if(rawType.equals(List.class)) {
 			for(int i=0; i<jsonArr.length(); i++) {
 				JSONArray subArr = jsonArr.getJSONArray(i);
-				Object item = decoderReg.listDecoder().convertList(subArr, compGenType);
+				Object item = decoderReg.listDecoder().convertList(subArr, compGenType, null);
 				result.add(item);
 			}
 		}
 		else if(rawType.equals(Set.class)) {
 			for(int i=0; i<jsonArr.length(); i++) {
 				JSONArray subArr = jsonArr.getJSONArray(i);
-				Object item = decoderReg.listDecoder().convertSet(subArr, compGenType);
+				Object item = decoderReg.listDecoder().convertSet(subArr, compGenType, null);
 				result.add(item);
 			}
 		}
 		else if(rawType.equals(Map.class)) {
 			for(int i=0; i<jsonArr.length(); i++) {
 				JSONObject subJson = jsonArr.getJSONObject(i);
-				Object item = decoderReg.mapDecoder().convert(subJson, compGenType);
+				Object item = decoderReg.mapDecoder().convert(subJson, compGenType, null);
 				result.add(item);
 			}
 		}
 		return result;
 	}
 
-	private ArrayList<?> convertClassType(JSONArray jsonArr, Class<?> clsType) {
+	private ArrayList<?> convertClassType(JSONArray jsonArr, Class<?> clsType, Converter conv) {
 		Class<?> compType = clsType.getComponentType();
 		ArrayList<Object> valueList = new ArrayList<>();
 		for(int i=0; i<jsonArr.length(); i++) {
-			valueList.add(convertOne(jsonArr, i, compType));
+			valueList.add(convertOne(jsonArr, i, compType, conv));
 		}
 		return valueList;
 	}

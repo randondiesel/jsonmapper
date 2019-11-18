@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import id.jsonmapper.ConvertUsing;
+import id.jsonmapper.Converter;
 import id.jsonmapper.JSON;
 import id.jsonmapper.Raw;
 import id.jsonmapper.support.JSONArray;
@@ -46,6 +48,10 @@ class FieldDecoder {
 			throws ReflectiveOperationException, JSONException {
 
 		if(convertRaw(parentJson, parentObj, field)) {
+			return;
+		}
+
+		if(convertUsing(parentJson, parentObj, field)) {
 			return;
 		}
 
@@ -74,27 +80,28 @@ class FieldDecoder {
 		}
 
 		if(field.getType().isArray()) {
-			convertArray(parentJson, parentObj, field);
+			convertArray(parentJson, parentObj, field, null);
 			return;
 		}
 
 		if(field.getType().equals(List.class)) {
 			JSONArray arr = parentJson.getJSONArray(ann.value());
-			List<?> values = decoderReg.listDecoder().convertList(arr, field.getGenericType());
+			List<?> values = decoderReg.listDecoder().convertList(arr,
+					field.getGenericType(), null);
 			populate(parentObj, field, values);
 			return;
 		}
 
 		if(field.getType().equals(Set.class)) {
 			JSONArray arr = parentJson.getJSONArray(ann.value());
-			Set<?> values = decoderReg.listDecoder().convertSet(arr, field.getGenericType());
+			Set<?> values = decoderReg.listDecoder().convertSet(arr, field.getGenericType(), null);
 			populate(parentObj, field, values);
 			return;
 		}
 
 		if(field.getType().equals(Map.class)) {
 			JSONObject json = parentJson.getJSONObject(ann.value());
-			Map<?, ?> value = decoderReg.mapDecoder().convert(json, field.getGenericType());
+			Map<?, ?> value = decoderReg.mapDecoder().convert(json, field.getGenericType(), null);
 			populate(parentObj, field, value);
 			return;
 		}
@@ -132,6 +139,54 @@ class FieldDecoder {
 			return true;
 		}
 		return false;
+	}
+
+	private boolean convertUsing(JSONObject parentJson, Object parentObj, Field field)
+			throws ReflectiveOperationException, JSONException {
+		ConvertUsing cuann = field.getAnnotation(ConvertUsing.class);
+		if(cuann == null) {
+			return false;
+		}
+
+		Class<? extends Converter> convType = cuann.value();
+		if(convType == null) {
+			return false;
+		}
+
+		Converter conv = convType.newInstance();
+
+		JSON ann = field.getAnnotation(JSON.class);
+
+		if(field.getType().isArray()) {
+			convertArray(parentJson, parentObj, field, conv);
+			return true;
+		}
+
+		if(field.getType().equals(List.class)) {
+			JSONArray arr = parentJson.getJSONArray(ann.value());
+			List<?> values = decoderReg.listDecoder().convertList(
+					arr, field.getGenericType(), conv);
+			populate(parentObj, field, values);
+			return true;
+		}
+
+		if(field.getType().equals(Set.class)) {
+			JSONArray arr = parentJson.getJSONArray(ann.value());
+			Set<?> values = decoderReg.listDecoder().convertSet(arr, field.getGenericType(), conv);
+			populate(parentObj, field, values);
+			return true;
+		}
+
+		if(field.getType().equals(Map.class)) {
+			JSONObject json = parentJson.getJSONObject(ann.value());
+			Map<?, ?> value = decoderReg.mapDecoder().convert(json, field.getGenericType(), conv);
+			populate(parentObj, field, value);
+			return true;
+		}
+
+		Object fldVal = conv.json2Object(parentJson.get(ann.value()), field.getType());
+		populate(parentObj, field, fldVal);
+		return true;
 	}
 
 	private boolean convertPrimitive(JSONObject parentJson, Object parentObj, Field field)
@@ -186,11 +241,11 @@ class FieldDecoder {
 		return flag;
 	}
 
-	private void convertArray(JSONObject parentJson, Object parentObj, Field field)
+	private void convertArray(JSONObject parentJson, Object parentObj, Field field, Converter conv)
 				throws ReflectiveOperationException {
 		JSON ann = field.getAnnotation(JSON.class);
 		JSONArray jsonArr = parentJson.getJSONArray(ann.value());
-		Object[] values = decoderReg.arrayDecoder().convert(jsonArr, field.getGenericType());
+		Object[] values = decoderReg.arrayDecoder().convert(jsonArr, field.getGenericType(), conv);
 		if(values != null) {
 			Object arrVal = Array.newInstance(field.getType().getComponentType(), values.length);
 			for(int j=0; j < values.length; j++) {

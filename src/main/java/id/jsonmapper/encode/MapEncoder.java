@@ -16,8 +16,10 @@ package id.jsonmapper.encode;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
+import id.jsonmapper.Converter;
 import id.jsonmapper.support.JSONObject;
 
 /**
@@ -33,13 +35,13 @@ class MapEncoder {
 		encoderReg = reg;
 	}
 
-	public JSONObject convert(Map<?, ?> map) {
+	public JSONObject convert(Map<?, ?> map, Converter conv) {
 		JSONObject jsonObj = new JSONObject();
 		for(Object key : map.keySet()) {
 			if(!(key instanceof CharSequence)) {
 				continue;
 			}
-			Object jsonItem = convertOne(map.get(key));
+			Object jsonItem = convertOne(map.get(key), conv);
 			if(jsonItem != null) {
 				jsonObj.put(((CharSequence) key).toString(), jsonItem);
 			}
@@ -50,10 +52,21 @@ class MapEncoder {
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	// Helper methods
 
-	private Object convertOne(Object item) {
+	private Object convertOne(Object item, Converter conv) {
 		if(item == null) {
 			return null;
 		}
+
+		if(conv != null) {
+			Optional<JSONObject> optjson = conv.object2Json(item);
+			if(optjson == null) {
+				return encoderReg.objectEncoder().convert(item);
+			}
+			else {
+				return optjson.get();
+			}
+		}
+
 		Class<?> itemCls = item.getClass();
 		if(itemCls.equals(Boolean.TYPE) || itemCls.equals(Boolean.class)) {
 			return (Boolean) item;
@@ -83,16 +96,16 @@ class MapEncoder {
 			return item.toString();
 		}
 		else if(item instanceof List) {
-			return encoderReg.arrayEncoder().convertList((List<?>) item);
+			return encoderReg.arrayEncoder().convertList((List<?>) item, null);
 		}
 		else if(item instanceof Set) {
-			return encoderReg.arrayEncoder().convertSet((Set<?>) item);
+			return encoderReg.arrayEncoder().convertSet((Set<?>) item, null);
 		}
 		else if(item.getClass().isArray()) {
-			return encoderReg.arrayEncoder().convertArray((Object[]) item);
+			return encoderReg.arrayEncoder().convertArray((Object[]) item, null);
 		}
 		else if(item instanceof Map) {
-			return encoderReg.mapEncoder().convert((Map<?, ?>) item);
+			return encoderReg.mapEncoder().convert((Map<?, ?>) item, null);
 		}
 		else {
 			return encoderReg.objectEncoder().convert(item);

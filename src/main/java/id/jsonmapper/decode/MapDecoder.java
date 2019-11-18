@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import id.jsonmapper.Converter;
 import id.jsonmapper.support.JSONArray;
 import id.jsonmapper.support.JSONObject;
 
@@ -41,9 +42,8 @@ class MapDecoder {
 		decoderReg = reg;
 	}
 
-	public Map<?, ?> convert(JSONObject jsonObj, Type genType) {
+	public Map<?, ?> convert(JSONObject jsonObj, Type genType, Converter conv) {
 		if(!(genType instanceof ParameterizedType)) {
-			//System.out.println("not parameterized");
 			return null;
 		}
 		ParameterizedType pmzType = (ParameterizedType) genType;
@@ -66,7 +66,7 @@ class MapDecoder {
 		if(compGenType instanceof Class) {
 			HashMap<String, Object> result = new HashMap<>();
 			for(String key : jsonObj.keySet()) {
-				Object value = convertOne(jsonObj, key, (Class<?>) compGenType);
+				Object value = convertOne(jsonObj, key, (Class<?>) compGenType, conv);
 				result.put(key, value);
 			}
 			return result;
@@ -78,17 +78,17 @@ class MapDecoder {
 			for(String key : jsonObj.keySet()) {
 				if(rawType.equals(List.class)) {
 					JSONArray subArr = jsonObj.getJSONArray(key);
-					Object value = decoderReg.listDecoder().convertList(subArr, compGenType);
+					Object value = decoderReg.listDecoder().convertList(subArr, compGenType, null);
 					result.put(key, value);
 				}
 				if(rawType.equals(Set.class)) {
 					JSONArray subArr = jsonObj.getJSONArray(key);
-					Object value = decoderReg.listDecoder().convertSet(subArr, compGenType);
+					Object value = decoderReg.listDecoder().convertSet(subArr, compGenType, null);
 					result.put(key, value);
 				}
 				if(rawType.equals(Map.class)) {
 					JSONObject subJson = jsonObj.getJSONObject(key);
-					Object value = convert(subJson, compGenType);
+					Object value = convert(subJson, compGenType, null);
 					result.put(key, value);
 				}
 			}
@@ -100,7 +100,11 @@ class MapDecoder {
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	// Helper methods
 
-	private Object convertOne(JSONObject json, String key, Class<?> compType) {
+	private Object convertOne(JSONObject json, String key, Class<?> compType, Converter conv) {
+
+		if(conv != null) {
+			return conv.json2Object(json.get(key), compType);
+		}
 
 		if(compType.equals(Boolean.TYPE) || compType.equals(Boolean.class)) {
 			return json.getBoolean(key);
@@ -158,7 +162,7 @@ class MapDecoder {
 		}
 
 		if(compType.isArray()) {
-			return decoderReg.arrayDecoder().convert(json.getJSONArray(key), compType);
+			return decoderReg.arrayDecoder().convert(json.getJSONArray(key), compType, null);
 		}
 
 		if(!compType.isInterface() && !Modifier.isAbstract(compType.getModifiers())) {

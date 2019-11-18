@@ -46,13 +46,13 @@ public class Object2Json {
 		if(obj instanceof Collection) {
 			JSONArray jsonArr = null;
 			if(obj instanceof List) {
-				jsonArr = reg.arrayEncoder().convertList((List<?>) obj);
+				jsonArr = reg.arrayEncoder().convertList((List<?>) obj, null);
 			}
 			else if(obj instanceof Set) {
-				jsonArr = reg.arrayEncoder().convertSet((Set<?>) obj);
+				jsonArr = reg.arrayEncoder().convertSet((Set<?>) obj, null);
 			}
 			else if(obj.getClass().isArray()) {
-				jsonArr = reg.arrayEncoder().convertArray((Object[]) obj);
+				jsonArr = reg.arrayEncoder().convertArray((Object[]) obj, null);
 			}
 			if(jsonArr != null) {
 				return jsonArr.toString(2).getBytes();

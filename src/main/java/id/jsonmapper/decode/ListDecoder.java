@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import id.jsonmapper.Converter;
 import id.jsonmapper.support.JSONArray;
 import id.jsonmapper.support.JSONObject;
 
@@ -40,7 +41,7 @@ class ListDecoder extends LinearCollectionDecoder {
 		decoderReg = reg;
 	}
 
-	public List<?> convertList(JSONArray jsonArr, Type genType) {
+	public List<?> convertList(JSONArray jsonArr, Type genType, Converter conv) {
 		if(!(genType instanceof ParameterizedType)) {
 			//System.out.println("not parameterized");
 			return null;
@@ -61,7 +62,7 @@ class ListDecoder extends LinearCollectionDecoder {
 		if(compGenType instanceof Class) {
 			ArrayList<Object> result = new ArrayList<>(jsonArr.length());
 			for(int i=0; i<jsonArr.length(); i++) {
-				result.add(convertOne(jsonArr, i, (Class<?>) compGenType));
+				result.add(convertOne(jsonArr, i, (Class<?>) compGenType, conv));
 			}
 			return result;
 		}
@@ -72,19 +73,19 @@ class ListDecoder extends LinearCollectionDecoder {
 			if(rawType.equals(List.class)) {
 				for(int i=0; i<jsonArr.length(); i++) {
 					JSONArray subArr = jsonArr.getJSONArray(i);
-					result.add(convertList(subArr, compGenType));
+					result.add(convertList(subArr, compGenType, null));
 				}
 			}
 			else if(rawType.equals(Set.class)) {
 				for(int i=0; i<jsonArr.length(); i++) {
 					JSONArray subArr = jsonArr.getJSONArray(i);
-					result.add(convertSet(subArr, compGenType));
+					result.add(convertSet(subArr, compGenType, null));
 				}
 			}
 			else if(rawType.equals(Map.class)) {
 				for(int i=0; i<jsonArr.length(); i++) {
 					JSONObject subJson = jsonArr.getJSONObject(i);
-					Object item = decoderReg.mapDecoder().convert(subJson, compGenType);
+					Object item = decoderReg.mapDecoder().convert(subJson, compGenType, null);
 					result.add(item);
 				}
 			}
@@ -93,8 +94,8 @@ class ListDecoder extends LinearCollectionDecoder {
 		return null;
 	}
 
-	public Set<?> convertSet(JSONArray jsonArr, Type genType) {
-		List<?> theList = convertList(jsonArr, genType);
+	public Set<?> convertSet(JSONArray jsonArr, Type genType, Converter conv) {
+		List<?> theList = convertList(jsonArr, genType, conv);
 		if(theList == null) {
 			return null;
 		}

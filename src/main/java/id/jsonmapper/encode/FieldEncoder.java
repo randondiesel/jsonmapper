@@ -18,8 +18,11 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
+import id.jsonmapper.ConvertUsing;
+import id.jsonmapper.Converter;
 import id.jsonmapper.JSON;
 import id.jsonmapper.support.JSONArray;
 import id.jsonmapper.support.JSONException;
@@ -41,11 +44,15 @@ class FieldEncoder {
 	public void convert(Object parentObj, Field field, JSONObject jsonObj)
 			throws ReflectiveOperationException, JSONException {
 
-		JSON ann = field.getAnnotation(JSON.class);
+		if(convertUsing(parentObj, field, jsonObj)) {
+			return;
+		}
 
 		if(convertPrimitive(parentObj, field, jsonObj)) {
 			return;
 		}
+
+		JSON ann = field.getAnnotation(JSON.class);
 
 		if(field.getType().equals(String.class)) {
 			String fieldVal = (String) retrieve(parentObj, field);
@@ -58,7 +65,7 @@ class FieldEncoder {
 		if(field.getType().isArray()) {
 			Object[] fieldVals = retrieveArray(parentObj, field);
 			if(fieldVals != null && fieldVals.length > 0) {
-				JSONArray jsonArr = encoderReg.arrayEncoder().convertArray(fieldVals);
+				JSONArray jsonArr = encoderReg.arrayEncoder().convertArray(fieldVals, null);
 				jsonObj.put(ann.value(), jsonArr);
 			}
 			return;
@@ -67,7 +74,7 @@ class FieldEncoder {
 		if(List.class.isAssignableFrom(field.getType())) {
 			List<?> fieldVal = (List<?>) retrieve(parentObj, field);
 			if(fieldVal != null && !fieldVal.isEmpty()) {
-				JSONArray jsonArr = encoderReg.arrayEncoder().convertList(fieldVal);
+				JSONArray jsonArr = encoderReg.arrayEncoder().convertList(fieldVal, null);
 				jsonObj.put(ann.value(), jsonArr);
 			}
 			return;
@@ -76,7 +83,7 @@ class FieldEncoder {
 		if(Set.class.isAssignableFrom(field.getType())) {
 			Set<?> fieldVal = (Set<?>) retrieve(parentObj, field);
 			if(fieldVal != null && !fieldVal.isEmpty()) {
-				JSONArray jsonArr = encoderReg.arrayEncoder().convertSet(fieldVal);
+				JSONArray jsonArr = encoderReg.arrayEncoder().convertSet(fieldVal, null);
 				jsonObj.put(ann.value(), jsonArr);
 			}
 			return;
@@ -85,7 +92,7 @@ class FieldEncoder {
 		if(Map.class.isAssignableFrom(field.getType())) {
 			Map<?, ?> fieldVal = (Map<?, ?>) retrieve(parentObj, field);
 			if(fieldVal != null && !fieldVal.isEmpty()) {
-				JSONObject jsonMap = encoderReg.mapEncoder().convert(fieldVal);
+				JSONObject jsonMap = encoderReg.mapEncoder().convert(fieldVal, null);
 				jsonObj.put(ann.value(), jsonMap);
 			}
 			return;
@@ -100,6 +107,71 @@ class FieldEncoder {
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	// Helper methods
+
+	private boolean convertUsing(Object parentObj, Field field, JSONObject jsonObj)
+			throws ReflectiveOperationException, JSONException {
+		ConvertUsing cuann = field.getAnnotation(ConvertUsing.class);
+		if(cuann == null) {
+			return false;
+		}
+
+		Class<? extends Converter> convType = cuann.value();
+		if(convType == null) {
+			return false;
+		}
+
+		Converter conv = convType.newInstance();
+
+		JSON ann = field.getAnnotation(JSON.class);
+
+		if(field.getType().isArray()) {
+			Object[] fieldVals = retrieveArray(parentObj, field);
+			if(fieldVals != null && fieldVals.length > 0) {
+				JSONArray jsonArr = encoderReg.arrayEncoder().convertArray(fieldVals, conv);
+				jsonObj.put(ann.value(), jsonArr);
+			}
+			return true;
+		}
+
+		if(List.class.isAssignableFrom(field.getType())) {
+			List<?> fieldVal = (List<?>) retrieve(parentObj, field);
+			if(fieldVal != null && !fieldVal.isEmpty()) {
+				JSONArray jsonArr = encoderReg.arrayEncoder().convertList(fieldVal, conv);
+				jsonObj.put(ann.value(), jsonArr);
+			}
+			return true;
+		}
+
+		if(Set.class.isAssignableFrom(field.getType())) {
+			Set<?> fieldVal = (Set<?>) retrieve(parentObj, field);
+			if(fieldVal != null && !fieldVal.isEmpty()) {
+				JSONArray jsonArr = encoderReg.arrayEncoder().convertSet(fieldVal, conv);
+				jsonObj.put(ann.value(), jsonArr);
+			}
+			return true;
+		}
+
+		if(Map.class.isAssignableFrom(field.getType())) {
+			Map<?, ?> fieldVal = (Map<?, ?>) retrieve(parentObj, field);
+			if(fieldVal != null && !fieldVal.isEmpty()) {
+				JSONObject jsonMap = encoderReg.mapEncoder().convert(fieldVal, conv);
+				jsonObj.put(ann.value(), jsonMap);
+			}
+			return true;
+		}
+
+		Object fieldVal = retrieve(parentObj, field);
+		if(fieldVal != null) {
+			Optional<JSONObject> optjson = conv.object2Json(fieldVal);
+			if(optjson == null) {
+				JSONObject json = encoderReg.objectEncoder().convert(fieldVal);
+				jsonObj.put(ann.value(), json);
+			}
+			jsonObj.put(ann.value(), optjson.get());
+		}
+
+		return true;
+	}
 
 	private boolean convertPrimitive(Object parentObj, Field field, JSONObject jsonObj)
 			throws ReflectiveOperationException, JSONException {

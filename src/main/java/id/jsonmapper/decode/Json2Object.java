@@ -70,7 +70,7 @@ public class Json2Object {
 		if(type instanceof Class) {
 			Class<?> ctype = (Class<?>) type;
 			if(ctype.isArray() && jsonRoot instanceof JSONArray) {
-				Object[] values = reg.arrayDecoder().convert((JSONArray) jsonRoot, ctype);
+				Object[] values = reg.arrayDecoder().convert((JSONArray) jsonRoot, ctype, null);
 				if(values != null) {
 					Object arrVal = Array.newInstance(ctype.getComponentType(), values.length);
 					for(int i=0; i < values.length; i++) {
@@ -89,15 +89,15 @@ public class Json2Object {
 			Type rtype = ptype.getRawType();
 			if(jsonRoot instanceof JSONArray) {
 				if(rtype.equals(List.class)) {
-					return reg.listDecoder.convertList((JSONArray) jsonRoot, type);
+					return reg.listDecoder.convertList((JSONArray) jsonRoot, type, null);
 				}
 				if(rtype.equals(Set.class)) {
-					return reg.listDecoder.convertSet((JSONArray) jsonRoot, type);
+					return reg.listDecoder.convertSet((JSONArray) jsonRoot, type, null);
 				}
 			}
 			else if(jsonRoot instanceof JSONObject) {
 				if(rtype.equals(Map.class)) {
-					return reg.mapDecoder.convert((JSONObject) jsonRoot, type);
+					return reg.mapDecoder.convert((JSONObject) jsonRoot, type, null);
 				}
 			}
 		}
@@ -219,7 +219,7 @@ public class Json2Object {
 			if(ctype.isArray()) {
 				try {
 					JSONArray jarr = nowVal.getJSONArray(name);
-					Object[] values = reg.arrayDecoder().convert(jarr, ctype);
+					Object[] values = reg.arrayDecoder().convert(jarr, ctype, null);
 					if(values != null) {
 						Object arrVal = Array.newInstance(ctype.getComponentType(), values.length);
 						for(int i=0; i < values.length; i++) {
@@ -247,15 +247,15 @@ public class Json2Object {
 				Object lastVal = nowVal.get(name);
 				if(lastVal instanceof JSONArray) {
 					if(rtype.equals(List.class)) {
-						return reg.listDecoder.convertList((JSONArray) lastVal, type);
+						return reg.listDecoder.convertList((JSONArray) lastVal, type, null);
 					}
 					if(rtype.equals(Set.class)) {
-						return reg.listDecoder.convertSet((JSONArray) lastVal, type);
+						return reg.listDecoder.convertSet((JSONArray) lastVal, type, null);
 					}
 				}
 				else if(lastVal instanceof JSONObject) {
 					if(rtype.equals(Map.class)) {
-						return reg.mapDecoder.convert((JSONObject) lastVal, type);
+						return reg.mapDecoder.convert((JSONObject) lastVal, type, null);
 					}
 				}
 			}

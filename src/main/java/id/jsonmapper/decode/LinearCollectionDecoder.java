@@ -18,6 +18,7 @@ import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import id.jsonmapper.Converter;
 import id.jsonmapper.support.JSONArray;
 
 /**
@@ -33,7 +34,17 @@ abstract class LinearCollectionDecoder {
 		decoderReg = reg;
 	}
 
-	protected final Object convertOne(JSONArray jsonArr, int position, Class<?> compType) {
+	protected final Object convertOne(JSONArray jsonArr, int position,
+			Class<?> compType, Converter conv) {
+
+		if(compType.isArray()) {
+			return decoderReg.arrayDecoder().convert(jsonArr.getJSONArray(position),
+				compType, conv);
+		}
+
+		if(conv != null) {
+			return conv.json2Object(jsonArr.getJSONObject(position), compType);
+		}
 
 		if(compType.equals(Boolean.TYPE) || compType.equals(Boolean.class)) {
 			return jsonArr.getBoolean(position);
@@ -84,10 +95,6 @@ abstract class LinearCollectionDecoder {
 
 		if(compType.equals(BigInteger.class)) {
 			return jsonArr.getBigInteger(position);
-		}
-
-		if(compType.isArray()) {
-			return decoderReg.arrayDecoder().convert(jsonArr.getJSONArray(position), compType);
 		}
 
 		if(!compType.isInterface() && !Modifier.isAbstract(compType.getModifiers())) {

@@ -19,6 +19,8 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import id.jsonmapper.JSON;
 import id.jsonmapper.support.JSONException;
@@ -30,6 +32,8 @@ import id.jsonmapper.support.JSONObject;
  */
 
 class ObjectDecoder {
+
+	private static final Logger _L = Logger.getLogger(ObjectDecoder.class.getName());
 
 	private DecoderRegistry decoderReg;
 
@@ -55,7 +59,7 @@ class ObjectDecoder {
 				decoderReg.fieldDecoder().convert(jsonObj, target, field);
 			}
 			catch(ReflectiveOperationException | JSONException exep) {
-				//exep.printStackTrace();
+				_L.log(Level.FINE, "unable to decode field " + field.getName(), exep);
 			}
 		}
 		return target;

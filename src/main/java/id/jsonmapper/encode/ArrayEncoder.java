@@ -16,9 +16,12 @@ package id.jsonmapper.encode;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
+import id.jsonmapper.Converter;
 import id.jsonmapper.support.JSONArray;
+import id.jsonmapper.support.JSONObject;
 
 /**
  * @author indroneel
@@ -33,10 +36,10 @@ class ArrayEncoder {
 		encoderReg = reg;
 	}
 
-	public JSONArray convertArray(Object[] items) {
+	public JSONArray convertArray(Object[] items, Converter conv) {
 		JSONArray jsonArr = new JSONArray();
 		for(Object item : items) {
-			Object jsonItem = convertOne(item);
+			Object jsonItem = convertOne(item, conv);
 			if(jsonItem != null) {
 				jsonArr.put(jsonItem);
 			}
@@ -44,21 +47,21 @@ class ArrayEncoder {
 		return jsonArr;
 	}
 
-	public JSONArray convertList(List<?> list) {
-		return convertIterable(list);
+	public JSONArray convertList(List<?> list, Converter conv) {
+		return convertIterable(list, conv);
 	}
 
-	public JSONArray convertSet(Set<?> set) {
-		return convertIterable(set);
+	public JSONArray convertSet(Set<?> set, Converter conv) {
+		return convertIterable(set, conv);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	// Helper methods
 
-	private JSONArray convertIterable(Iterable<?> collection) {
+	private JSONArray convertIterable(Iterable<?> collection, Converter conv) {
 		JSONArray jsonArr = new JSONArray();
 		for(Object item : collection) {
-			Object jsonItem = convertOne(item);
+			Object jsonItem = convertOne(item, conv);
 			if(jsonItem != null) {
 				jsonArr.put(jsonItem);
 			}
@@ -66,10 +69,21 @@ class ArrayEncoder {
 		return jsonArr;
 	}
 
-	private Object convertOne(Object item) {
+	private Object convertOne(Object item, Converter conv) {
 		if(item == null) {
 			return null;
 		}
+
+		if(conv != null) {
+			Optional<JSONObject> optjson = conv.object2Json(item);
+			if(optjson == null) {
+				return encoderReg.objectEncoder().convert(item);
+			}
+			else {
+				return optjson.get();
+			}
+		}
+
 		Class<?> itemCls = item.getClass();
 		if(itemCls.equals(Boolean.TYPE) || itemCls.equals(Boolean.class)) {
 			return (Boolean) item;
@@ -99,13 +113,13 @@ class ArrayEncoder {
 			return item.toString();
 		}
 		else if(item instanceof List) {
-			return convertList((List<?>) item);
+			return convertList((List<?>) item, null);
 		}
 		else if(item instanceof Set) {
-			return convertSet((Set<?>) item);
+			return convertSet((Set<?>) item, null);
 		}
 		else if(item instanceof Map) {
-			return encoderReg.mapEncoder().convert((Map<?, ?>) item);
+			return encoderReg.mapEncoder().convert((Map<?, ?>) item, null);
 		}
 		else {
 			return encoderReg.objectEncoder().convert(item);
